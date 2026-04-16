@@ -7,11 +7,11 @@ namespace MemoryTool.Models
 {
     public class PieSlice : INotifyPropertyChanged
     {
-        private string _processName;
+        private string _processName = string.Empty;
         private long _size;
         private double _percentage;
         private Color _color;
-        private Geometry _geometry;
+        private Geometry _geometry = null!;
 
         public string ProcessName
         {
