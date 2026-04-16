@@ -38,9 +38,9 @@ namespace MemoryTool.Models
         public string UsedMemoryFormatted => FormatBytes(UsedMemory);
         public string AvailableMemoryFormatted => FormatBytes(AvailableMemory);
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

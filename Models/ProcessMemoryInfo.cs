@@ -5,7 +5,7 @@ namespace MemoryTool.Models
 {
     public class ProcessMemoryInfo : INotifyPropertyChanged
     {
-        private string _processName;
+        private string _processName = string.Empty;
         private int _processId;
         private long _workingSet;
 
@@ -29,9 +29,9 @@ namespace MemoryTool.Models
 
         public string WorkingSetFormatted => FormatBytes(WorkingSet);
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

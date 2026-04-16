@@ -3,10 +3,70 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MemoryTool"
+        xmlns:vm="clr-namespace:MemoryTool.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="内存使用情况查看器" Height="600" Width="900"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <!-- 系统内存概况 -->
+        <GroupBox Header="系统内存概况" Grid.Row="0" Margin="0 0 0 10" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="总内存:"  Grid.Row="0"  Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 5"/>
+                <TextBlock Text="{Binding SystemMemory.TotalMemoryFormatted}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold"/>
+
+                <TextBlock Text="已用内存:" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="0 0 10 5"/>
+                <TextBlock Text="{Binding SystemMemory.UsedMemoryFormatted}" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold" Foreground="{Binding SystemMemory.UsagePercentage, Converter={StaticResource UsageToBrushConverter}}"/>
+
+                <TextBlock Text="可用内存:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                <TextBlock Text="{Binding SystemMemory.AvailableMemoryFormatted}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 0 0" FontSize="14"/>
+
+                <TextBlock Text="使用率:" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="20 0 10 5"/>
+                <TextBlock Text="{Binding SystemMemory.UsagePercentage, StringFormat={}{0:F1}%}" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold" Foreground="{Binding SystemMemory.UsagePercentage, Converter={StaticResource UsageToBrushConverter}}"/>
+
+                <ProgressBar Value="{Binding SystemMemory.UsagePercentage}" Maximum="100" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Height="30" Margin="20 5 0 5" VerticalAlignment="Center">
+                    <ProgressBar.Background>
+                        <SolidColorBrush Color="#EEEEEE"/>
+                    </ProgressBar.Background>
+                </ProgressBar>
+            </Grid>
+        </GroupBox>
+
+        <!-- 进程列表 -->
+        <GroupBox Header="进程内存占用 (按内存降序排序)" Grid.Row="1" Margin="0 0 0 10">
+            <DataGrid ItemsSource="{Binding Processes}" AutoGenerateColumns="False" IsReadOnly="True" CanUserSortColumns="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="进程名称" Binding="{Binding ProcessName}" Width="Auto" SortDirection="Descending"/>
+                    <DataGridTextColumn Header="PID" Binding="{Binding ProcessId}" Width="120"/>
+                    <DataGridTextColumn Header="内存占用" Binding="{Binding WorkingSetFormatted}" Width="120" SortMemberPath="WorkingSet"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+
+        <!-- 刷新按钮 -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="刷新" Command="{Binding RefreshCommand}" IsEnabled="{Binding IsRefreshing, Converter={StaticResource InverseBoolConverter}}" Padding="20 5" FontSize="14">
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>
