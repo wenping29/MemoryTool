@@ -21,34 +21,66 @@
         <GroupBox Header="系统内存概况" Grid.Row="0" Margin="0 0 0 10" Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
 
-                <TextBlock Text="总内存:"  Grid.Row="0"  Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 5"/>
-                <TextBlock Text="{Binding SystemMemory.TotalMemoryFormatted}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold"/>
+                <!-- 文字信息区域 -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Text="已用内存:" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="0 0 10 5"/>
-                <TextBlock Text="{Binding SystemMemory.UsedMemoryFormatted}" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold" Foreground="{Binding SystemMemory.UsagePercentage, Converter={StaticResource UsageToBrushConverter}}"/>
+                    <TextBlock Text="总内存:"  Grid.Row="0"  Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 5"/>
+                    <TextBlock Text="{Binding SystemMemory.TotalMemoryFormatted}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold"/>
 
-                <TextBlock Text="可用内存:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                <TextBlock Text="{Binding SystemMemory.AvailableMemoryFormatted}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 0 0" FontSize="14"/>
+                    <TextBlock Text="已用内存:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 5"/>
+                    <TextBlock Text="{Binding SystemMemory.UsedMemoryFormatted}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold" Foreground="{Binding SystemMemory.UsagePercentage, Converter={StaticResource UsageToBrushConverter}}"/>
 
-                <TextBlock Text="使用率:" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="20 0 10 5"/>
-                <TextBlock Text="{Binding SystemMemory.UsagePercentage, StringFormat={}{0:F1}%}" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold" Foreground="{Binding SystemMemory.UsagePercentage, Converter={StaticResource UsageToBrushConverter}}"/>
+                    <TextBlock Text="可用内存:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                    <TextBlock Text="{Binding SystemMemory.AvailableMemoryFormatted}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 0 0" FontSize="14"/>
 
-                <ProgressBar Value="{Binding SystemMemory.UsagePercentage}" Maximum="100" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Height="30" Margin="20 5 0 5" VerticalAlignment="Center">
-                    <ProgressBar.Background>
-                        <SolidColorBrush Color="#EEEEEE"/>
-                    </ProgressBar.Background>
-                </ProgressBar>
+                    <TextBlock Text="使用率:" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="20 0 10 5"/>
+                    <TextBlock Text="{Binding SystemMemory.UsagePercentage, StringFormat={}{0:F1}%}" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" Margin="0 0 0 5" FontSize="14" FontWeight="Bold" Foreground="{Binding SystemMemory.UsagePercentage, Converter={StaticResource UsageToBrushConverter}}"/>
+
+                    <ProgressBar Value="{Binding SystemMemory.UsagePercentage}" Maximum="100" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Height="30" Margin="20 5 0 5" VerticalAlignment="Center">
+                        <ProgressBar.Background>
+                            <SolidColorBrush Color="#EEEEEE"/>
+                        </ProgressBar.Background>
+                    </ProgressBar>
+                </Grid>
+
+                <!-- 饼图区域 -->
+                <Grid Grid.Column="2" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid>
+                        <!-- 可用内存背景 (灰色) -->
+                        <Ellipse Width="100" Height="100" Fill="#EEEEEE"/>
+                        <!-- 已用内存饼图 -->
+                        <Path>
+                            <Path.Fill>
+                                <SolidColorBrush Color="{Binding SystemMemory.UsagePercentage, Converter={StaticResource UsageToBrushConverter}}"/>
+                            </Path.Fill>
+                            <Path.Data>
+                                <MultiBinding Converter="{StaticResource PercentageToPieConverter}">
+                                    <Binding Path="SystemMemory.UsagePercentage"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </Path.Data>
+                        </Path>
+                        <!-- 图例文字 -->
+                        <TextBlock Text="{Binding SystemMemory.UsagePercentage, StringFormat={}{0:F0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                    </Grid>
+                </Grid>
             </Grid>
         </GroupBox>
 

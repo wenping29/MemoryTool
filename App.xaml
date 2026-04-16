@@ -6,5 +6,6 @@
     <Application.Resources>
         <converters:UsageToBrushConverter x:Key="UsageToBrushConverter"/>
         <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <converters:PercentageToPieConverter x:Key="PercentageToPieConverter"/>
     </Application.Resources>
 </Application>
