@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MemoryTool")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e6567b7c0b545c348697a8f656ab7fbf8aaebad1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b1585f1e9fad58398a382fde5e3567ec8b03f7c")]
 [assembly: System.Reflection.AssemblyProductAttribute("MemoryTool")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MemoryTool")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
